@@ -1,0 +1,24 @@
+{
+  "name": "bouquet",
+  "version": "1.0.0",
+  "description": "bouquet app ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "express",
+    "nodejs",
+    "bouquet"
+  ],
+  "author": "bhavikpatel",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.15.5",
+    "highcharts": "^5.0.14",
+    "pryjs": "^1.0.3",
+    "pug": "^2.0.0-rc.4",
+    "request": "^2.83.0",
+    "xmlhttprequest": "^1.8.0"
+  }
+}
