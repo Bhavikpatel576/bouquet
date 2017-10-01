@@ -23,10 +23,21 @@ var requestTime = function (req, res, next) {
 	next()
 }
 
-function getData (data, month, year) 
+function getData(json, month, year) {
+    var hash;
+    var monthly_spend_department = [];
+    var department_spend = [];
+    hash = getHashData(json, month, year)
+
+    for (var key in hash){
+        monthly_spend_department.push([key, hash[key]]);
+    }
+    return monthly_spend_department;
+}
+
+function getHashData (data, month, year) 
 {
     var department_info = {};
-
     data.forEach(function(hist_data)
     {
         var date_info = hist_data["month_and_year"]
@@ -51,7 +62,6 @@ app.use(myLogger)
 
 
 app.get('/date', function (req, res) {
-	// res.send(responseText)
     request.get({
     url: url,
     json: true,
@@ -65,19 +75,15 @@ app.get('/date', function (req, res) {
           // data is already parsed as JSON:
         }
         //do the calculation to return sum value of one department with one time
-         var data_output = getData(data,3, 2017);
-         var array = [];
-         array.push(data_output);
-
-        //uses the templating engine pug to display information
-        let colors = ["Red", "Green", "Blue"];
-        let langs  = ["HTML", "CSS", "JS"];
-        let title  = "My Cool Website";
-
+        var month = 3;
+        var year = 2017;
+        var data_output = getData(data, month, year);
         let locals = {
-            title:      title,
             title: 'Hey',
-            data_output: JSON.stringify(data_output),
+            data_output1: JSON.stringify(data_output),
+            data_output: data_output,
+            month: month,
+            year: year
         };
         res.render('index', locals );
     });
@@ -85,13 +91,10 @@ app.get('/date', function (req, res) {
 })
 
 app.post('/date', function (req, res) {
-  var body_info = req.body
-  var date = new Date(body_info['month'])
-  var month = date.getMonth()
-  var year = date.getFullYear()
-  console.log(body_info)
-  console.log(month)
-  console.log(year)
+    var body_info = req.body
+    var date = new Date(body_info['month'])
+    var month = date.getMonth()
+    var year = date.getFullYear()
 
     request.get({
     url: url,
@@ -105,15 +108,15 @@ app.post('/date', function (req, res) {
         } else {
      
         }
-         var data_output = getData(data, month, year);
-         console.log(data_output)
-         var array = [];
-         array.push(data_output);
+        var data_output = getData(data, month, year);
         let title  = "My Cool Website";
 
         let locals = {
             title:      title,
-            data_output: JSON.stringify(data_output)
+            data_output1: JSON.stringify(data_output),
+            data_output: data_output,
+            month: month,
+            year: year
         };
         res.render('index', locals );
     });     

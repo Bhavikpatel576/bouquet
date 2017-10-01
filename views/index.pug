@@ -10,13 +10,14 @@ html
     body
         p Department information breakdown for month: #{month} year: #{year}
         div#container(style="width: 950px; height: 400px; margin: 0 auto")
-          script.
-            var data_output = !{data_output};
-            console.log(data_output['HEALTH AND HUMAN SERVICES'])
-            var chart;
+    block content
+    form(action='/date', method='POST')
+      p
+        |Date: 
+        input(type='date', name='month', value='', min="2014-12-31", max="2017-12-31")
+      input(type='submit', value='Submit')
+    script.
                $(document).ready(function() {
-                var chartdata = [],
-                labels = [];
                 
                 var chart = {
                    type: 'column'
@@ -63,18 +64,7 @@ html
 
                 var series = [{
                   name: 'Monthly Spend by Department',
-                  data: [
-                      ['HEALTH AND HUMAN SERVICES', data_output['HEALTH AND HUMAN SERVICES']],
-                      ['HUMAN RESOURCES', data_output['HUMAN RESOURCES']],
-                      ['DEPARTMENT OF PUBLIC WORKS', data_output['DEPARTMENT OF PUBLIC WORKS']],
-                      ['DEPARTMENT OF FINANCE', data_output['DEPARTMENT OF FINANCE']],
-                      ['CULTURAL SERVICES', data_output['CULTURAL SERVICES']],
-                      ['MARIN COUNTY PARKS', data_output['MARIN COUNTY PARKS']],
-                      ['MARIN COUNTY FIRE', data_output['MARIN COUNTY FIRE']],
-                      ['MARIN COUNTY FREE LIBRARY', data_output['MARIN COUNTY FREE LIBRARY']],
-                      ['PROBATION', data_output['PROBATION']],
-                      ['AGRICULTURE WEIGHTS MEASURES', data_output['AGRICULTURE WEIGHTS MEASURES']]
-                ]
+                  data: !{data_output1}
                 }];
              
                 var json = {};   
@@ -89,10 +79,3 @@ html
                 json.credits = credits;
                 $('#container').highcharts(json);
              });
-
-    block content
-    form(action='/date', method='POST')
-      p
-        |Date: 
-        input(type='date', name='month', value='', min="2014-12-31", max="2017-12-31")
-      input(type='submit', value='Submit')
