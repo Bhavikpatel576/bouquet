@@ -61,7 +61,7 @@ app.use(requestTime)
 app.use(myLogger)
 
 
-app.get('/date', function (req, res) {
+app.get('/', function (req, res) {
     request.get({
     url: url,
     json: true,
@@ -90,7 +90,7 @@ app.get('/date', function (req, res) {
 	
 })
 
-app.post('/date', function (req, res) {
+app.post('/', function (req, res) {
     var body_info = req.body
     var date = new Date(body_info['month'])
     var month = date.getMonth()
