@@ -1,7 +1,7 @@
 {
   "name": "bouquet",
   "version": "1.0.0",
-  "description": "bouquet app ",
+  "description": "bouquet app",
   "main": "index.js",
   "engines": {
     "node": "8.6.0",
@@ -25,5 +25,9 @@
     "pug": "^2.0.0-rc.4",
     "request": "^2.83.0",
     "xmlhttprequest": "^1.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Bhavikpatel576/"
   }
 }
