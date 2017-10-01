@@ -4,6 +4,10 @@ const express = require('express')
 const app = express()
 var request = require('request');
 var Highcharts = require('highcharts');
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+// in latest body-parser use like below.
 app.set('view engine', 'pug')
 
 // require('highcharts/modules/exporting')(Highcharts);
@@ -46,10 +50,7 @@ app.use(requestTime)
 app.use(myLogger)
 
 
-app.get('/', function (req, res) {
-	var responseText = 'Hello You Crazy World!<br>'
-	responseText += '<small>Requested at: ' + req.requestTime + '</small>'
-
+app.get('/date', function (req, res) {
 	// res.send(responseText)
     request.get({
     url: url,
@@ -64,19 +65,59 @@ app.get('/', function (req, res) {
           // data is already parsed as JSON:
         }
         //do the calculation to return sum value of one department with one time
-        
-         var data_output = getData(data,6, 2016);
+         var data_output = getData(data,3, 2017);
          var array = [];
          array.push(data_output);
-         console.log(data_output);
-         console.log(array);
 
         //uses the templating engine pug to display information
-        res.render('index', { title: 'Hey', message: 'Hello there!', message2:responseText, data_output: data_output, data_output2: array });
+        let colors = ["Red", "Green", "Blue"];
+        let langs  = ["HTML", "CSS", "JS"];
+        let title  = "My Cool Website";
+
+        let locals = {
+            title:      title,
+            title: 'Hey',
+            data_output: JSON.stringify(data_output),
+        };
+        res.render('index', locals );
     });
 	
 })
 
+app.post('/date', function (req, res) {
+  var body_info = req.body
+  var date = new Date(body_info['month'])
+  var month = date.getMonth()
+  var year = date.getFullYear()
+  console.log(body_info)
+  console.log(month)
+  console.log(year)
+
+    request.get({
+    url: url,
+    json: true,
+    headers: {'User-Agent': 'request'}
+    }, (err, res2, data) => {
+        if (err) {
+          console.log('Error:', err);
+        } else if (res2.statusCode !== 200) {
+          console.log('Status:', res2.statusCode);
+        } else {
+     
+        }
+         var data_output = getData(data, month, year);
+         console.log(data_output)
+         var array = [];
+         array.push(data_output);
+        let title  = "My Cool Website";
+
+        let locals = {
+            title:      title,
+            data_output: JSON.stringify(data_output)
+        };
+        res.render('index', locals );
+    });     
+})
 
 
 app.listen(3000)
