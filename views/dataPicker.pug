@@ -1,3 +1,5 @@
+
+
 form(action='/', method='POST', id='formId')
   label(for="startDate") Date:
   input(id='date', name='month', readonly='true')
@@ -8,8 +10,8 @@ script(type="text/javascript").
       dateFormat: "mm/yy",
       changeMonth: true,
       changeYear: true,
-      minDate: new Date(2016, 5, 1),
-      maxDate: new Date(2017, 7, 1),
+      minDate: new Date(#{jsonDateInfo.minDate.getFullYear()}, #{jsonDateInfo.minDate.getMonth()}, 1),
+      maxDate: new Date(#{jsonDateInfo.maxDate.getFullYear()}, #{jsonDateInfo.maxDate.getMonth()}, 1),
       showButtonPanel: true,
       onClose : function(dateText, inst){
         function isDonePressed(){

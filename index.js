@@ -48,6 +48,28 @@ function getHashData (data, month, year)
   return department_info;
 }
 
+function getMinMaxDate(data)
+{
+  var date_info = {
+    minDate: new Date(),
+    maxDate: null
+  };
+
+  data.forEach(function(hist_data)
+  {
+    var date_item = hist_data["month_and_year"]
+    var date = new Date(date_item);
+    if (date_info.minDate > date) {
+      date_info.minDate = date;
+    };
+    if (date_info.maxDate < date){
+      date_info.maxDate = date;
+    }
+  });
+
+  return date_info;
+}
+
 app.get('/', function (req, res) {
     request.get({
     url: url,
@@ -58,29 +80,28 @@ app.get('/', function (req, res) {
           console.log('Error:', err);
         } else if (res2.statusCode !== 200) {
           console.log('Status:', res2.statusCode);
-        } else {
-        }
-          var month = 6;
-          var year = 2016;
-          var data_output = getData(data, month, year);
-          let locals = {
-              title: 'bouquet graph',
-              data_output1: JSON.stringify(data_output),
-              data_output: data_output,
-              month: month,
-              year: year
-          };
-        // }
-        res.render('index', locals );
+        };
+        var jsonDateInfo = getMinMaxDate(data);
+        var startMonth = jsonDateInfo.minDate.getMonth();
+        var startYear = jsonDateInfo.minDate.getFullYear();
+        var data_output = getData(data, startMonth, startYear);
+        let locals = {
+            title: 'Bouquet.ai Graph',
+            data_output1: JSON.stringify(data_output),
+            jsonDateInfo: jsonDateInfo,
+            month: startMonth,
+            year: startYear
+        };
+      res.render('index', locals );
     });
 })
 
 app.post('/', function (req, res) {
     var body_info = req.body
     var date = new Date(body_info['month'].substr(3,6),body_info['month'].substr(0,2))
-    var month = date.getMonth()
-    var year = date.getFullYear()
-    
+    var month = date.getMonth() == 0 ? date.getMonth() + 11 : date.getMonth() - 1
+    var year = month == 11 ? date.getFullYear() - 1 : date.getFullYear()
+
     request.get({
     url: url,
     json: true,
@@ -90,18 +111,17 @@ app.post('/', function (req, res) {
           console.log('Error:', err);
         } else if (res2.statusCode !== 200) {
           console.log('Status:', res2.statusCode);
-        } else {
         };
-          var data_output = getData(data, month, year);
-          let locals = {
-              title: 'bouquet graph',
-              data_output1: JSON.stringify(data_output),
-              data_output: data_output,
-              month: month,
-              year: year
-          // };
+        var data_output = getData(data, month, year);
+        var jsonDateInfo = getMinMaxDate(data);
+        let locals = {
+            title: 'Bouquet.ai Graph',
+            data_output1: JSON.stringify(data_output),
+            month: month,
+            year: year,
+            jsonDateInfo: jsonDateInfo
         };
-        res.render('index', locals );
+      res.render('index', locals );
     });     
 })
 
