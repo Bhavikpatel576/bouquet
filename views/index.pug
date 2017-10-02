@@ -4,76 +4,70 @@ html
         title= title
         link(rel='stylesheet', href='/stylesheets/style.css')
         script(src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js")
+        script(type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js")
         script(src = "https://code.highcharts.com/highcharts.js")
     body
-        p Department information breakdown for month: #{month} year: #{year}
-        div#container(style="width: 950px; height: 400px; margin: 0 auto")
-    block content
-    form(action='/', method='POST')
-      p
-        |Date: 
-        input(type='date', name='month', value='', min="2014-12-31", max="2017-12-31")
-      input(type='submit', value='Submit')
-    script.
-               $(document).ready(function() {
-                
-                var chart = {
-                   type: 'column'
-                };
-                var title = {
-                   text: "Total Spend by department."
-                };
-                var subtitle = {
-                   text: 'Source: Bouquet.inc!'  
-                };
-                var xAxis = {
-                   type: 'category',
-                   labels: {
-                      rotation: -45,
-                      style: {
-                          fontSize: '13px',
-                          fontFamily: 'Verdana, sans-serif'
-                      }
-                   }
-                };
-                var yAxis = {
-                   min: 0,
-                   title: {
-                      text: 'Spend (thousands)'         
-                   }      
-                };
-                var tooltip = {
-                   headerFormat: '<span style = "font-size:10px">{point.key}</span><table>',
-                   pointFormat: '<tr><td style = "color:{series.color};padding:0">{series.name}: </td>' +
-                      '<td style = "padding:0"><b>{point.y:.1f}</b></td></tr>',
-                   footerFormat: '</table>',
-                   shared: true,
-                   useHTML: true
-                };
-                var plotOptions = {
-                   column: {
-                      pointPadding: 0.2,
-                      borderWidth: 0
-                   }
-                };
-                var credits = {
-                   enabled: false
-                };
+        div#container(style="width: 950px; height: 400px; margin: auto")
+        include dataPicker.pug
+        script.
+          $(document).ready(function() {
+            var chart = {
+               type: 'column'
+            };
+            var title = {
+               text: "Total Spend by department."
+            };
+            var subtitle = {
+               text: 'Source: Bouquet.inc!'  
+            };
+            var xAxis = {
+               type: 'category',
+               labels: {
+                  rotation: -45,
+                  style: {
+                      fontSize: '13px',
+                      fontFamily: 'Verdana, sans-serif'
+                  }
+               }
+            };
+            var yAxis = {
+               min: 0,
+               title: {
+                  text: 'Spend (thousands)'         
+               }      
+            };
+            var tooltip = {
+               headerFormat: '<span style = "font-size:10px">{point.key}</span><table>',
+               pointFormat: '<tr><td style = "color:{series.color};padding:0">{series.name}: </td>' +
+                  '<td style = "padding:0"><b>{point.y:.1f}</b></td></tr>',
+               footerFormat: '</table>',
+               shared: true,
+               useHTML: true
+            };
+            var plotOptions = {
+               column: {
+                  pointPadding: 0.2,
+                  borderWidth: 0
+               }
+            };
+            var credits = {
+               enabled: false
+            };
 
-                var series = [{
-                  name: 'Monthly Spend by Department',
-                  data: !{data_output1}
-                }];
-             
-                var json = {};   
-                json.chart = chart; 
-                json.title = title;   
-                json.subtitle = subtitle; 
-                json.tooltip = tooltip;
-                json.xAxis = xAxis;
-                json.yAxis = yAxis;  
-                json.series = series;
-                json.plotOptions = plotOptions;  
-                json.credits = credits;
-                $('#container').highcharts(json);
-             });
+            var series = [{
+              name: 'Monthly Spend by Department',
+              data: !{data_output1}
+            }];
+         
+            var json = {};   
+            json.chart = chart; 
+            json.title = title;   
+            json.subtitle = subtitle; 
+            json.tooltip = tooltip;
+            json.xAxis = xAxis;
+            json.yAxis = yAxis;  
+            json.series = series;
+            json.plotOptions = plotOptions;  
+            json.credits = credits;
+            $('#container').highcharts(json);
+         });
